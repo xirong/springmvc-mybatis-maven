@@ -12,3 +12,6 @@
 
 # 使用方法
 1. fork 代码
+2. 使用工具 idea 或者 eclipe 导入 现有maven项目，maven会自动下载所以来的jar包；
+3. 将 `doc` 文件夹中的sql脚本部署到MySQL中，取的MySQL连接串，修改 `jdbc.properties`中MySQL节点的url、user、password
+4. 调试代码，即可在页面中看到效果
