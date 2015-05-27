@@ -1,0 +1,10 @@
+.DS_Store
+.idea/
+*.class
+target/
+bin/
+*.iml
+~$*.xlsx
+.project
+.settings/
+.classpath

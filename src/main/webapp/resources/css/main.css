@@ -1,0 +1,91 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    color: #555555;
+    height: 100%;
+}
+
+a {
+    color: #009FDA;
+    cursor: pointer;
+}
+
+#header {
+    height: 50px;
+}
+
+.ui.menu .c-logo {
+    font-size: 18px;
+
+}
+
+.ui.menu .c-logo:hover .icon {
+    color: #009FDA;
+}
+
+.ui.menu .icon.upload {
+    font-size: 22px;
+}
+
+.ui.menu .c-copyright {
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.ui.menu .item.c-userinfo {
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+.main.container {
+    padding: 10px;
+}
+
+.c-ml1 {
+    margin-left: 10px;
+}
+
+.c-mr1 {
+    margin-right: 10px;
+}
+
+.table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: #f9f9f9;
+}
+
+tbody > tr:hover > td {
+    background-color: #F6F3D5;
+}
+
+.ui.hidden {
+    display: none;
+}
+
+/* override semantic css */
+.ui.modal > .header {
+    padding: 0.8rem 1rem;
+}
+
+.ui.modal > .content {
+    padding: 1.5rem;
+}
+
+.ui.modal > .content textarea {
+    height: 1rem;
+}
+
+.ui.modal .actions {
+    padding: 1rem 1.5rem;
+}
+
+.ui.grid > .row {
+    margin-top: 0;
+}
+
+.ui.progress {
+    height: 20px;
+    padding: 1px;
+}
+
+/* custom css */

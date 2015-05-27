@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:mvc="http://www.springframework.org/schema/mvc"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xmlns:util="http://www.springframework.org/schema/util"
+             xmlns:aop="http://www.springframework.org/schema/aop"
+             xsi:schemaLocation="http://www.springframework.org/schema/mvc
+             http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+
+    <!-- Enables the Spring MVC @Controller programming model 添加注解驱动-->
+    <context:annotation-config/>
+
+    <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+    <!--<resources mapping="/WEB-INF/resources/**" location="/resources/" />-->
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
+
+    <!-- 公共的Spring容器  -->
+    <beans:bean class="com.elong.web.core.SpringContext" />
+
+    <!-- 扫描com.elong.web包里下的所有class文件，配置注解的类全都装入容器中进行管理 -->
+    <context:component-scan base-package="repo.xirong"/>
+
+    <!--mybatis 数据库配置 -->
+    <util:properties id="dbConfig" location="classpath:/config/jdbc.properties"></util:properties>
+
+    <!-- mybatis bean 相关 ：三个数据库连接 -->
+    <beans:bean id="sqlserverTestSource" class="org.apache.commons.dbcp.BasicDataSource" lazy-init="default"
+                autowire="default">
+        <beans:property name="driverClassName" value="#{dbConfig['sqlserver.driver']}"></beans:property>
+        <beans:property name="url" value="#{dbConfig['testSqlServer.url']}"></beans:property>
+        <beans:property name="username" value="#{dbConfig['testSqlServer.user']}"/>
+        <beans:property name="password" value="#{dbConfig['testSqlServer.password']}"></beans:property>
+    </beans:bean>
+    <beans:bean id="mysqlTestSource" class="org.apache.commons.dbcp.BasicDataSource" lazy-init="default"
+                autowire="default">
+        <beans:property name="driverClassName" value="#{dbConfig['read.driver']}"></beans:property>
+        <beans:property name="url" value="#{dbConfig['read.url']}"></beans:property>
+        <beans:property name="username" value="#{dbConfig['read.user']}"></beans:property>
+        <beans:property name="password" value="#{dbConfig['read.password']}"></beans:property>
+        <beans:property name="maxActive" value="#{dbConfig['read.maxActive']}"></beans:property>
+        <beans:property name="maxIdle" value="#{dbConfig['read.maxIdle']}"></beans:property>
+        <beans:property name="maxWait" value="#{dbConfig['read.maxWait']}"></beans:property>
+        <beans:property name="timeBetweenEvictionRunsMillis"
+                        value="#{dbConfig['read.timeBetweenEvictionRunsMillis']}"></beans:property>
+        <beans:property name="testWhileIdle" value="#{dbConfig['read.testWhileIdle']}"></beans:property>
+        <beans:property name="validationQuery">
+            <beans:value>select 1 from DUAL</beans:value>
+        </beans:property>
+        <beans:property name="removeAbandoned" value="#{dbConfig['read.removeAbandoned']}"></beans:property>
+        <beans:property name="removeAbandonedTimeout"
+                        value="#{dbConfig['read.removeAbandonedTimeout']}"></beans:property>
+    </beans:bean>
+
+    <beans:bean id="dataSourceAll" class="com.elong.web.core.datasource.DynamicDataSource">
+        <beans:property name="targetDataSources" >
+            <beans:map key-type="java.lang.String">
+                <beans:entry key="sqlserverTestSource" value-ref="sqlserverTestSource" />
+                <beans:entry key="mysqlTestSource" value-ref="mysqlTestSource" />
+            </beans:map>
+        </beans:property>
+
+        <beans:property name="defaultTargetDataSource" ref="mysqlTestSource" />
+        <beans:property name="defaultDataSourceKey" value="mysqlTestSource" />
+    </beans:bean>
+
+    <!--<aop:config>-->
+        <!--<aop:pointcut id="serviceMethods"-->
+                      <!--expression="execution(* com.elong.web..*Impl*.*(..)) || execution(* com.elong.web.logplatform.checklist.*.*Impl*.*(..))" />-->
+
+        <!--<aop:advisor advice-ref="annotationMultipleDataSourceAdvice"-->
+                     <!--pointcut-ref="serviceMethods" />-->
+    <!--</aop:config>-->
+
+    <beans:bean id="annotationMultipleDataSourceAdvice"
+          class="com.elong.web.core.datasource.impl.AnnotationMultipleDataSourceAdvice">
+    </beans:bean>
+
+    <beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <beans:property name="configLocation" value="classpath:/config/spring-mybatis-config.xml" />
+        <beans:property name="dataSource" ref="dataSourceAll" />
+    </beans:bean>
+    <beans:bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <beans:property name="basePackage" value="repo.xirong.java.demo.mapper"/>
+    </beans:bean>
+
+    <!--<beans:bean id="test_mysql" class="org.apache.commons.dbcp.BasicDataSource" lazy-init="default"-->
+                <!--autowire="default">-->
+        <!--<beans:property name="driverClassName" value="#{dbConfig['read.driver']}"></beans:property>-->
+        <!--<beans:property name="url" value="#{dbConfig['read.url']}"></beans:property>-->
+        <!--<beans:property name="username" value="#{dbConfig['read.user']}"></beans:property>-->
+        <!--<beans:property name="password" value="#{dbConfig['read.password']}"></beans:property>-->
+        <!--<beans:property name="maxActive" value="#{dbConfig['read.maxActive']}"></beans:property>-->
+        <!--<beans:property name="maxIdle" value="#{dbConfig['read.maxIdle']}"></beans:property>-->
+        <!--<beans:property name="maxWait" value="#{dbConfig['read.maxWait']}"></beans:property>-->
+        <!--<beans:property name="timeBetweenEvictionRunsMillis"-->
+                        <!--value="#{dbConfig['read.timeBetweenEvictionRunsMillis']}"></beans:property>-->
+        <!--<beans:property name="testWhileIdle" value="#{dbConfig['read.testWhileIdle']}"></beans:property>-->
+        <!--<beans:property name="validationQuery">-->
+            <!--<beans:value>select 1 from DUAL</beans:value>-->
+        <!--</beans:property>-->
+        <!--<beans:property name="removeAbandoned" value="#{dbConfig['read.removeAbandoned']}"></beans:property>-->
+        <!--<beans:property name="removeAbandonedTimeout"-->
+                        <!--value="#{dbConfig['read.removeAbandonedTimeout']}"></beans:property>-->
+    <!--</beans:bean>-->
+    <!--end mybatis bean 相关 ：三个数据库连接 -->
+
+    <!-- freemarker 相关 -->
+    <beans:bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <beans:property name="templateLoaderPath" value="/WEB-INF/views/"/>
+        <beans:property name="defaultEncoding" value="utf-8"/>
+        <beans:property name="freemarkerSettings">
+            <beans:props>
+                <beans:prop key="template_update_delay">10</beans:prop>
+                <beans:prop key="locale">zh_CN</beans:prop>
+                <beans:prop key="datetime_format">yyyy-MM-dd</beans:prop>
+                <beans:prop key="date_format">yyyy-MM-dd</beans:prop>
+                <beans:prop key="number_format">#.##</beans:prop>
+            </beans:props>
+        </beans:property>
+    </beans:bean>
+    <!-- FreeMarker视图解析   如返回student。。在这里配置后缀名ftl和视图解析器。。-->
+    <beans:bean id="viewResolver"
+                class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <beans:property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView">
+        </beans:property>
+        <!--和<beans:property name="templateLoaderPath" value="/WEB-INF/view/" /> 这句冲突-->
+        <!-- <beans:property name="prefix" value="" />-->
+        <beans:property name="suffix" value=".ftl"/>
+        <beans:property name="contentType" value="text/html;charset=utf-8"/>
+        <beans:property name="exposeRequestAttributes" value="true"/>
+        <beans:property name="exposeSessionAttributes" value="true"/>
+        <beans:property name="exposeSpringMacroHelpers" value="true"/>
+    </beans:bean>
+
+
+    <beans:bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <beans:property name="ignoreDefaultModelOnRedirect" value="true"/>
+        <beans:property name="messageConverters">
+            <util:list>
+                <beans:ref bean="mappingJacksonHttpMessageConverter"/>
+            </util:list>
+        </beans:property>
+    </beans:bean>
+
+    <beans:bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+        <beans:property name="interceptors">
+            <util:list>
+                <!--<beans:bean class="com.elong.web.efc.admin.interceptor.LoginAnnotationInterceptor">-->
+                    <!--<beans:property name="excludeUrls">-->
+                        <!--<beans:set>-->
+                            <!--<beans:value>/</beans:value>-->
+                            <!--<beans:value>/user/login</beans:value>-->
+                            <!--<beans:value>/user/register</beans:value>-->
+                            <!--<beans:value>/user/logout</beans:value>-->
+                            <!--<beans:value>/hc/status.html</beans:value>-->
+
+                        <!--</beans:set>-->
+                    <!--</beans:property>-->
+                    <!--&lt;!&ndash;这个地方可以自定义404页面等 &ndash;&gt;-->
+                <!--</beans:bean>-->
+                <!--<beans:bean class="com.elong.web.efc.admin.interceptor.FileAnnotationInterceptor"/>-->
+            </util:list>
+        </beans:property>
+
+    </beans:bean>
+
+    <beans:bean id="mappingJacksonHttpMessageConverter"
+                class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+        <beans:property name="supportedMediaTypes">
+            <beans:list>
+                <beans:value>application/json;charset=UTF-8</beans:value>
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+
+    <beans:bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <beans:property name="exceptionMappings">
+            <beans:props>
+                <!--<beans:prop key="com.elong.web.efc.admin.util.UnauthorizedException">redirect:/</beans:prop>-->
+            </beans:props>
+        </beans:property>
+    </beans:bean>
+    <!--加载静态数据-->
+    <!--<beans:bean id="staticData" class="repo.xirong.java.demo.model.report.StaticData" />-->
+</beans:beans>
