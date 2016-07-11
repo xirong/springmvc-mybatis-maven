@@ -28,11 +28,19 @@ public class HomeController {
         ModelAndView mv =new ModelAndView();
         mv.setViewName("home");
 
-        ArrayList<User> users=service.getAllUsers();
-        mv.addObject("userList",users);
+//        ArrayList<User> users=service.getAllUsers();
+//        mv.addObject("userList",users);
 
         return mv;
     }
 
+    @RequestMapping(value="/test")
+    public ModelAndView test(Model model)
+    {
+        ModelAndView mv =new ModelAndView();
+        mv.setViewName("test");
+
+        return mv;
+    }
 
 }

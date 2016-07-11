@@ -48,14 +48,6 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-    <!--<filter>-->
-        <!--<filter-name>RequestParamFilter</filter-name>-->
-        <!--<filter-class>com.elong.web.mvc.RequestParamFilter</filter-class>-->
-    <!--</filter>-->
-    <!--<filter-mapping>-->
-        <!--<filter-name>RequestParamFilter</filter-name>-->
-        <!--<url-pattern>/*</url-pattern>-->
-    <!--</filter-mapping>-->
 
     <filter>
         <filter-name>CharacterEncodingFilter</filter-name>

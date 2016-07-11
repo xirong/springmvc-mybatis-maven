@@ -29,12 +29,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.elong.web</groupId>
-            <artifactId>web-core</artifactId>
-            <version>2.1.0-SNAPSHOT</version>
-        </dependency>
-        <!-- Spring 相关 -->
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${org.springframework-version}</version>

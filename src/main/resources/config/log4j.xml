@@ -36,11 +36,6 @@
         <param name="Append" value="true" />
         <param name="encoding" value="utf-8" />
         <param name="threshold" value="DEBUG" />
-        <layout class="com.elong.common.log.adapter.impl.LogPatternLayout">
-            <param name="filterLabel" value="" />
-            <param name="ConversionPattern"
-                   value="[%d{yyyy-MM-dd HH:mm:ss.SSS\} %-5p] [%t] (%c{1}:%L) -[%X{traceId}] %m%n" />
-        </layout>
     </appender>
     <logger name="CommonLogger">
         <level value="debug" />

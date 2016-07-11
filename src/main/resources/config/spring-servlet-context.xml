@@ -24,10 +24,8 @@
     <!--<resources mapping="/WEB-INF/resources/**" location="/resources/" />-->
     <mvc:resources mapping="/resources/**" location="/resources/"/>
 
-    <!-- 公共的Spring容器  -->
-    <beans:bean class="com.elong.web.core.SpringContext" />
 
-    <!-- 扫描com.elong.web包里下的所有class文件，配置注解的类全都装入容器中进行管理 -->
+    <!-- 扫描包里下的所有class文件，配置注解的类全都装入容器中进行管理 -->
     <context:component-scan base-package="repo.xirong"/>
 
     <!--mybatis 数据库配置 -->
@@ -61,17 +59,17 @@
                         value="#{dbConfig['read.removeAbandonedTimeout']}"></beans:property>
     </beans:bean>
 
-    <beans:bean id="dataSourceAll" class="com.elong.web.core.datasource.DynamicDataSource">
-        <beans:property name="targetDataSources" >
-            <beans:map key-type="java.lang.String">
-                <beans:entry key="sqlserverTestSource" value-ref="sqlserverTestSource" />
-                <beans:entry key="mysqlTestSource" value-ref="mysqlTestSource" />
-            </beans:map>
-        </beans:property>
+    <!--<beans:bean id="dataSourceAll" class="com.elong.web.core.datasource.DynamicDataSource">-->
+        <!--<beans:property name="targetDataSources" >-->
+            <!--<beans:map key-type="java.lang.String">-->
+                <!--<beans:entry key="sqlserverTestSource" value-ref="sqlserverTestSource" />-->
+                <!--<beans:entry key="mysqlTestSource" value-ref="mysqlTestSource" />-->
+            <!--</beans:map>-->
+        <!--</beans:property>-->
 
-        <beans:property name="defaultTargetDataSource" ref="mysqlTestSource" />
-        <beans:property name="defaultDataSourceKey" value="mysqlTestSource" />
-    </beans:bean>
+        <!--<beans:property name="defaultTargetDataSource" ref="mysqlTestSource" />-->
+        <!--<beans:property name="defaultDataSourceKey" value="mysqlTestSource" />-->
+    <!--</beans:bean>-->
 
     <!--<aop:config>-->
         <!--<aop:pointcut id="serviceMethods"-->
@@ -81,9 +79,9 @@
                      <!--pointcut-ref="serviceMethods" />-->
     <!--</aop:config>-->
 
-    <beans:bean id="annotationMultipleDataSourceAdvice"
-          class="com.elong.web.core.datasource.impl.AnnotationMultipleDataSourceAdvice">
-    </beans:bean>
+    <!--<beans:bean id="annotationMultipleDataSourceAdvice"-->
+          <!--class="com.elong.web.core.datasource.impl.AnnotationMultipleDataSourceAdvice">-->
+    <!--</beans:bean>-->
 
     <beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <beans:property name="configLocation" value="classpath:/config/spring-mybatis-config.xml" />
